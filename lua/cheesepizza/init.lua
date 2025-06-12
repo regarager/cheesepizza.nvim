@@ -13,5 +13,6 @@ end
 
 -- Set up a command
 vim.api.nvim_create_user_command("Contest", contest.newcontest, { nargs = "*" })
+vim.api.nvim_create_user_command("DebugToggle", contest.debugtoggle, { nargs = "*" })
 
 return M
