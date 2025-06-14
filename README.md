@@ -31,8 +31,9 @@ The default options are below (as well as in `lua/cheesepizza/config.lua`):
 require("cheesepizza").setup({
 	-- Generation of files for contests
 	contest = {
-		lang = "cpp", -- Default file extension/language to use
+		lang = "cpp", -- default file extension/language to use
 		lettered_files = true, -- use letters as file names (A.cpp, B.cpp, ...) instead of numbers (1.cpp, 2.cpp, ...)
+		change_dir = true, -- automatically :cd into the new contest directory
 	},
 	-- Templates to use for contests, USE AT YOUR OWN RISK
 	snippets = {
@@ -54,7 +55,7 @@ require("cheesepizza").setup({
 
 			size = true, -- set a constant size variable (default: 2e5 + 5)
 
-			ioopt = true, -- improve io speed
+			ioopt = false, -- improve io speed
 			separate_sections = true, -- add spacing between different sections of the snippet, sections follow the splitting in this file
 		},
 	},
