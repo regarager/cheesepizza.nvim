@@ -19,21 +19,30 @@ local function initcontest(input)
 			f:close()
 		end
 	end
+
+	return contest
 end
 
 function M.newcontest(opts)
+	local contest = ""
 	if vim.trim(opts.args) ~= "" then
-		initcontest(opts.args)
+		contest = initcontest(opts.args)
 	else
 		vim.ui.input({
 			prompt = "Enter contest name:",
 		}, function(input)
 			if input then
-				initcontest(input)
+				contest = initcontest(input)
 			else
 			end
 		end)
 	end
+
+	if M.config.change_dir then
+		vim.cmd(":cd " .. contest, { silent = true })
+	end
+
+	print("Created contest " .. contest .. "!")
 end
 
 -- patterns to look for when searching for debug line
