@@ -1,9 +1,38 @@
 local M = {
+	-- Running files
+	run = {
+		-- compilation commands
+		langs = {
+			c = {
+				clean = true,
+				exe = "gcc",
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "a.out" },
+				run = "./a.out",
+			},
+			cpp = {
+				clean = true,
+				exe = "g++",
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "a.out" },
+				run = "./a.out",
+			},
+			java = {
+				clean = true,
+				exe = "java",
+				args = {},
+			},
+			python = {
+				clean = false,
+				exe = "python",
+				args = {},
+			},
+		},
+	},
 	-- Generation of files for contests
 	contest = {
 		lang = "cpp", -- default file extension/language to use
 		lettered_files = true, -- use letters as file names (A.cpp, B.cpp, ...) instead of numbers (1.cpp, 2.cpp, ...)
 		change_dir = true, -- automatically :cd into the new contest directory
+		input_files = false, -- automatically create .in files
 	},
 	-- Templates to use for contests, USE AT YOUR OWN RISK
 	snippets = {

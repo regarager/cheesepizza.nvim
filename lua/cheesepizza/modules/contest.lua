@@ -12,11 +12,18 @@ local function initcontest(input)
 			name = util.letters[i]
 		end
 
-		local f = io.open(contest .. "/" .. name .. "." .. (ext or M.config.lang), "w")
+		local filename = contest .. "/" .. name
+		local f = io.open(filename .. "." .. (ext or M.config.lang), "w")
+		local fin = io.open(filename .. ".in", "w")
 
 		if f then
 			f:write("")
 			f:close()
+		end
+
+		if fin then
+			fin:write("")
+			fin:close()
 		end
 	end
 
@@ -42,7 +49,7 @@ function M.newcontest(opts)
 		vim.cmd(":cd " .. contest, { silent = true })
 	end
 
-	print("Created contest " .. contest .. "!")
+	print('Created contest "' .. contest .. '"!')
 end
 
 -- patterns to look for when searching for debug line
@@ -99,7 +106,6 @@ function M.debugtoggle()
 
 	vim.api.nvim_buf_set_lines(0, line_number - 1, line_number, false, { debug_lines[filetype] .. " " .. newvalue })
 
-	print(filetype)
 	print("Set DEBUG_MODE to " .. newvalue)
 end
 
