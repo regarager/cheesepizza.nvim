@@ -27,6 +27,10 @@ local M = {
 			},
 		},
 	},
+	-- Debug configuration
+	debug = {
+		autowrite = true,
+	},
 	-- Generation of files for contests
 	contest = {
 		lang = "cpp", -- default file extension/language to use
