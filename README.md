@@ -23,17 +23,69 @@ To install (for Lazy.nvim), simply add the following lines:
   - `SIZE` - the number of questions in the contest
   - `LANG` (optional) - the extension to use, defaults to the `lang` option in configuration.
 
+#### :DebugToggle
+- To use the command, enter `:DebugToggle`
+- If the language is supported, the `DEBUG_MODE` variable will be toggled
+  - This variable is used for disabling blocks of code that are intended only for debugging and not for final submission
+
+#### :DebugEnable
+- To use the command, enter `:DebugEnable`
+- Sets `DEBUG_MODE` to true
+
+#### :DebugDisable
+- To use the command, enter `:DebugDisable`
+- Sets `DEBUG_MODE` to false
+
+#### :CPRun
+- To use the command, enter `:CPRun`
+  - The active buffer must be a supported language file (CPP, Python, Java)
+- The program will be compiled (where applicable) and run
+  - Input is given through a corresponding `.in` file (ex: `A.in` for `A.cpp`)
+
 ### Configuration
 
 The default options are below (as well as in `lua/cheesepizza/config.lua`):
 
 ```lua
 require("cheesepizza").setup({
+	-- Running files
+	run = {
+		-- compilation commands
+		langs = {
+			c = {
+				clean = true,
+				exe = "gcc",
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "a.out" },
+				run = "./a.out",
+			},
+			cpp = {
+				clean = true,
+				exe = "g++",
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "a.out" },
+				run = "./a.out",
+			},
+			java = {
+				clean = true,
+				exe = "java",
+				args = {},
+			},
+			python = {
+				clean = false,
+				exe = "python",
+				args = {},
+			},
+		},
+	},
+	-- Debug configuration
+	debug = {
+		autowrite = true,
+	},
 	-- Generation of files for contests
 	contest = {
 		lang = "cpp", -- default file extension/language to use
 		lettered_files = true, -- use letters as file names (A.cpp, B.cpp, ...) instead of numbers (1.cpp, 2.cpp, ...)
 		change_dir = true, -- automatically :cd into the new contest directory
+		input_files = false, -- automatically create .in files
 	},
 	-- Templates to use for contests, USE AT YOUR OWN RISK
 	snippets = {
@@ -63,7 +115,8 @@ require("cheesepizza").setup({
 ```
 
 ### Coming Soon! (or not)
-- [ ] Quickly toggle debug mode
+- [x] Quickly toggle debug mode
+- [ ] Diff viewer for test cases
 - [ ] More snippets
 - [ ] Contest timer
 - [ ] Track solved in contest
