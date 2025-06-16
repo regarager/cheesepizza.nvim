@@ -10,12 +10,6 @@ local M = {
 		},
 		-- compilation commands
 		langs = {
-			c = {
-				clean = true,
-				exe = "gcc",
-				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "a.out" },
-				run = "./a.out",
-			},
 			cpp = {
 				clean = true,
 				exe = "g++",

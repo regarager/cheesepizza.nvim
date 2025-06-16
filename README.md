@@ -50,14 +50,15 @@ The default options are below (as well as in `lua/cheesepizza/config.lua`):
 require("cheesepizza").setup({
 	-- Running files
 	run = {
+		-- bit flags:
+		-- 0b01 - stdout
+		-- 0b10 - temporary file
+		output = 0b01,
+		diff = {
+			automatic = true, -- automatically open diff view
+		},
 		-- compilation commands
 		langs = {
-			c = {
-				clean = true,
-				exe = "gcc",
-				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "a.out" },
-				run = "./a.out",
-			},
 			cpp = {
 				clean = true,
 				exe = "g++",
@@ -83,7 +84,10 @@ require("cheesepizza").setup({
 	-- Generation of files for contests
 	contest = {
 		lang = "cpp", -- default file extension/language to use
-		lettered_files = true, -- use letters as file names (A.cpp, B.cpp, ...) instead of numbers (1.cpp, 2.cpp, ...)
+		-- function to generate file names (excluding extension), defaults to A, B, C, ...
+		filename = function(i)
+			return require("cheesepizza.util").letters[i]
+		end,
 		change_dir = true, -- automatically :cd into the new contest directory
 		input_files = false, -- automatically create .in files
 	},
