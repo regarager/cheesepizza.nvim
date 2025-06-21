@@ -11,12 +11,14 @@ local M = {
 		-- compilation commands
 		langs = {
 			cpp = {
+				compile = true,
 				clean = true,
 				exe = "g++",
-				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "a.out" },
-				run = "./a.out",
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "exe" },
+				run = "./exe",
 			},
 			java = {
+				compile = true,
 				clean = true,
 				exe = "java",
 				args = {},
