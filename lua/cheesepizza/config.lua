@@ -14,8 +14,8 @@ local M = {
 				compile = true,
 				clean = true,
 				exe = "g++",
-				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "exe" },
-				run = "./exe",
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow" },
+				run = "./a.out",
 			},
 			java = {
 				compile = true,

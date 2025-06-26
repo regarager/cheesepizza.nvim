@@ -176,7 +176,7 @@ function M.run()
 
 	exe = exe:gsub("%s+", "")
 
-	local args = opts["args"]
+	local args = { table.unpack(opts["args"]) }
 	table.insert(args, 1, exe)
 	table.insert(args, vim.api.nvim_buf_get_name(0))
 
