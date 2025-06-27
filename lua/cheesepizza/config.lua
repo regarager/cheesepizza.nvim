@@ -1,10 +1,7 @@
 local M = {
 	-- Running files
 	run = {
-		-- bit flags:
-		-- 0b01 - stdout
-		-- 0b10 - temporary file
-		output = 0b01,
+		-- output diff viewer
 		diff = {
 			automatic = true, -- automatically open diff view
 		},

@@ -50,22 +50,21 @@ The default options are below (as well as in `lua/cheesepizza/config.lua`):
 require("cheesepizza").setup({
 	-- Running files
 	run = {
-		-- bit flags:
-		-- 0b01 - stdout
-		-- 0b10 - temporary file
-		output = 0b01,
+		-- output diff viewer
 		diff = {
 			automatic = true, -- automatically open diff view
 		},
 		-- compilation commands
 		langs = {
 			cpp = {
+				compile = true,
 				clean = true,
 				exe = "g++",
-				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow", "-o", "a.out" },
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++11", "-O2", "-Wshadow" },
 				run = "./a.out",
 			},
 			java = {
+				compile = true,
 				clean = true,
 				exe = "java",
 				args = {},

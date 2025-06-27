@@ -176,7 +176,7 @@ function M.run()
 
 	exe = exe:gsub("%s+", "")
 
-	local args = { table.unpack(opts["args"]) }
+	local args = { (table.unpack or unpack)(opts["args"]) }
 	table.insert(args, 1, exe)
 	table.insert(args, vim.api.nvim_buf_get_name(0))
 
@@ -204,6 +204,14 @@ function M.run()
 	if vim.fn.filereadable(input_file) then
 		local s = string.format("cd %s && %s", vim.fn.getcwd(), cmd)
 		output = vim.fn.system(s)
+		if opts["clean"] then
+			local clean_cmd = string.format("cd %s && rm %s", vim.fn.getcwd(), opts["run"])
+			local clean_output = vim.fn.system(clean_cmd)
+
+			if #clean_output > 0 then
+				print("Error while cleaning file: " .. output)
+			end
+		end
 	else
 		print("Input file not found")
 	end
