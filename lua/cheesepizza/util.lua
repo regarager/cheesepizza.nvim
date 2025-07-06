@@ -29,23 +29,17 @@ M.letters = {
 	"Z",
 }
 
-function M.parse_contest_info(input)
-	local parts = {}
-	for part in string.gmatch(input, "%S+") do
-		table.insert(parts, part)
-	end
+function M.fileexists(file)
+	return vim.fn.filereadable(file) == 1
+end
 
-	local first = parts[1] or ""
-	local second = 0
-	local third = parts[3]
+function M.ends_width(s, suffix)
+	return s:sub(-#suffix) == suffix
+end
 
-	if parts[2] then
-		if string.match(parts[2], "^%-?%d+$") then
-			second = tonumber(parts[2])
-		end
-	end
-
-	return first, second, third
+function M.which(exe)
+	local path = vim.system({ "which", exe }):wait()
+	return path.stdout
 end
 
 return M

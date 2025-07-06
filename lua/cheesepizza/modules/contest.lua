@@ -1,39 +1,69 @@
-local util = require("cheesepizza.util")
-
 local M = {}
 
+local function parse_contest_info(input)
+	local parts = {}
+	for part in string.gmatch(input, "%S+") do
+		table.insert(parts, part)
+	end
+
+	local first = parts[1] or ""
+	local second = 0
+	local third = parts[3]
+
+	if parts[2] then
+		if string.match(parts[2], "^%-?%d+$") then
+			second = tonumber(parts[2])
+		end
+	end
+
+	return first, second, third
+end
+
 local function initcontest(input)
-	local contest, problems, ext = util.parse_contest_info(input)
+	local contest, problems, ext = parse_contest_info(input)
 	vim.fn.mkdir(contest, "p")
 
 	for i = 1, problems, 1 do
-		local name = tostring(i)
-		if M.config.lettered_files then
-			name = util.letters[i]
-		end
+		local name = M.config.filename(i)
 
-		local f = io.open(contest .. "/" .. name .. "." .. (ext or M.config.lang), "w")
+		local filename = contest .. "/" .. name
+		local f = io.open(filename .. "." .. (ext or M.config.lang), "w")
+		local fin = io.open(filename .. ".in", "w")
 
 		if f then
 			f:write("")
 			f:close()
 		end
+
+		if fin then
+			fin:write("")
+			fin:close()
+		end
 	end
+
+	return contest
 end
 
 function M.newcontest(opts)
+	local contest = ""
 	if vim.trim(opts.args) ~= "" then
-		initcontest(opts.args)
+		contest = initcontest(opts.args)
 	else
 		vim.ui.input({
 			prompt = "Enter contest name:",
 		}, function(input)
 			if input then
-				initcontest(input)
+				contest = initcontest(input)
 			else
 			end
 		end)
 	end
+
+	if M.config.change_dir then
+		vim.cmd(":cd " .. contest, { silent = true })
+	end
+
+	print('Created contest "' .. contest .. '"!')
 end
 
 function M.setup(config)

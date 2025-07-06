@@ -1,8 +1,45 @@
 local M = {
+	-- Running files
+	run = {
+		-- output diff viewer
+		diff = {
+			automatic = true, -- automatically open diff view
+		},
+		-- compilation commands
+		langs = {
+			cpp = {
+				compile = true,
+				clean = true,
+				exe = "g++",
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++23", "-O2", "-Wshadow" },
+				run = "./a.out",
+			},
+			java = {
+				compile = true,
+				clean = true,
+				exe = "java",
+				args = {},
+			},
+			python = {
+				clean = false,
+				exe = "python",
+				args = {},
+			},
+		},
+	},
+	-- Debug configuration
+	debug = {
+		autowrite = true,
+	},
 	-- Generation of files for contests
 	contest = {
-		lang = "cpp", -- Default file extension/language to use
-		lettered_files = true, -- use letters as file names (A.cpp, B.cpp, ...) instead of numbers (1.cpp, 2.cpp, ...)
+		lang = "cpp", -- default file extension/language to use
+		-- function to generate file names (excluding extension), defaults to A, B, C, ...
+		filename = function(i)
+			return require("cheesepizza.util").letters[i]
+		end,
+		change_dir = true, -- automatically :cd into the new contest directory
+		input_files = false, -- automatically create .in files
 	},
 	-- Templates to use for contests, USE AT YOUR OWN RISK
 	snippets = {
@@ -24,7 +61,7 @@ local M = {
 
 			size = true, -- set a constant size variable (default: 2e5 + 5)
 
-			ioopt = true, -- improve io speed
+			ioopt = false, -- improve io speed
 			separate_sections = true, -- add spacing between different sections of the snippet, sections follow the splitting in this file
 		},
 	},
