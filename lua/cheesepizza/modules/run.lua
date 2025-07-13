@@ -196,28 +196,45 @@ function M.run()
 
 	local cmd = string.format(opts.run, vim.api.nvim_buf_get_name(0))
 	local base = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t:r")
+
 	local input_file = base .. ".in"
 
 	cmd = cmd .. " < " .. input_file
 
-	local output = ""
 	if vim.fn.filereadable(input_file) then
-		local s = string.format("cd %s && %s", vim.fn.getcwd(), cmd)
-		output = vim.fn.system(s)
+		local dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":p:h")
+		local input = vim.fn.readfile(input_file)
+
+		args = vim.split(cmd, " ", { plain = true })
+		vim.system(args, {
+			cwd = dir,
+			text = true,
+			stdin = table.concat(input, "\n"),
+		}, function(result)
+			local output = (result.stdout or "") .. (result.stderr or "")
+			if #output > 0 then
+				output = output .. "\n"
+			end
+
+			output = output .. string.format("(exited with code %d)\n", result.code)
+
+			if M.config.diff.automatic then
+				vim.schedule(function()
+					M.showdiff(output)
+				end)
+			end
+		end)
+
 		if opts["clean"] then
 			local clean_cmd = string.format("cd %s && rm %s", vim.fn.getcwd(), opts["run"])
 			local clean_output = vim.fn.system(clean_cmd)
 
 			if #clean_output > 0 then
-				print("Error while cleaning file: " .. output)
+				print("Error while cleaning file: " .. clean_output)
 			end
 		end
 	else
 		print("Input file not found")
-	end
-
-	if M.config.diff.automatic then
-		M.showdiff(output)
 	end
 end
 
