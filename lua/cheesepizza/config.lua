@@ -11,7 +11,7 @@ local M = {
 				compile = true,
 				clean = true,
 				exe = "g++",
-				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++23", "-O2", "-Wshadow" },
+				args = { "-Wall", "-Wextra", "-pedantic", "-std=c++23", "-O2", "-Wshadow", "-g", "-D_GLIBCXX_DEBUG" },
 				run = "./a.out",
 			},
 			java = {
