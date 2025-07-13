@@ -1,19 +1,16 @@
+local ls = require("luasnip")
+local i = ls.insert_node
+
+local s = ls.snippet
+local t = ls.text_node
+local fmt = require("luasnip.extras.fmt").fmt
+
 local M = {}
 
-local function setup_cpp(config)
+local function setup_cpp_template(config)
 	if not config.enabled then
 		return
 	end
-
-	local ls = require("luasnip")
-	local i = ls.insert_node
-
-	if ls == nil then
-		return
-	end
-
-	local s = ls.snippet
-	local fmt = require("luasnip.extras.fmt").fmt
 
 	local lines = {}
 
@@ -47,6 +44,14 @@ local function setup_cpp(config)
 
 	if config.separate_sections and #lines > 0 then
 		table.insert(lines, "")
+	end
+
+	if config.it_has then
+		table.insert(lines, "#define has(x, y) x.find(y) != x.end()")
+	end
+
+	if config.it_all then
+		table.insert(lines, "#define all(x) x.begin(), x.end()")
 	end
 
 	if config.yn then
@@ -86,28 +91,61 @@ local function setup_cpp(config)
 
 	table.insert(lines, "int main() {{")
 
-	if config.ioopt then
-		table.insert(lines, "\tios::sync_with_stdio(0);")
-		table.insert(lines, "\tcin.tie(0);")
-		table.insert(lines, "\tcout.tie(0);")
-		table.insert(lines, "")
-	end
-
 	table.insert(lines, "\t{code}")
 
 	table.insert(lines, "}}")
 
 	ls.add_snippets("cpp", {
-		s("cp", fmt(table.concat(lines, "\n"), { code = i(0) })),
+		s("cp", fmt(table.concat(lines, "\n"), { code = i(1) })),
 	})
 end
 
-function M.setup(config)
-	local ls = require("luasnip")
-	if ls == nil then
+local function setup_cpp_optional(config)
+	if not config.enabled then
 		return
 	end
 
+	if config.sieve then
+		ls.add_snippets("cpp", {
+			s(
+				"sieve",
+				t(
+					"vector<bool> sieve(SIZE, true); for (int i = 2; i < SIZE; i++) { if (!sieve[i]) continue; for (int j = i * 2; j < SIZE; j += i) sieve[i] = false; }"
+				)
+			),
+		})
+	end
+	if config.primes then
+		ls.add_snippets("cpp", {
+			s("primes", t("vector<int> primes; for (int i = 2; i < SIZE; i++) { if (sieve[i]) primes.push_back(i); }")),
+		})
+	end
+
+	if config.fastio then
+		local lines = {}
+		table.insert(lines, "ios::sync_with_stdio(0);")
+		table.insert(lines, "cin.tie(0);")
+		table.insert(lines, "cout.tie(0);")
+		ls.add_snippets("cpp", {
+			s("fastio", t(lines)),
+		})
+	end
+end
+
+local function setup_cpp(config)
+	if not config.enabled then
+		return
+	end
+
+	setup_cpp_template(config.template)
+	setup_cpp_optional(config.optional)
+end
+
+function M.setup(config)
+	if ls == nil then
+		vim.notify("BAD", vim.log.levels.ERROR)
+		return
+	end
 	if not config.snippets.enabled then
 		return
 	end
