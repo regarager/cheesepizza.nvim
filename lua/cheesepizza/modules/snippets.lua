@@ -110,7 +110,7 @@ local function setup_cpp_optional(config)
 			s(
 				"sieve",
 				t(
-					"vector<bool> sieve(SIZE, true); for (int i = 2; i < SIZE; i++) { if (!sieve[i]) continue; for (int j = i * 2; j < SIZE; j += i) sieve[i] = false; }"
+					"vector<bool> sieve(SIZE, true); for (int i = 2; i < SIZE; i++) { if (!sieve[i]) continue; for (int j = i * 2; j < SIZE; j += i) sieve[j] = false; }"
 				)
 			),
 		})

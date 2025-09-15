@@ -51,8 +51,10 @@ require("cheesepizza").setup({
 	-- Running files
 	run = {
 		-- output diff viewer
+		output = "split", -- "popup", "split", or "none"
 		diff = {
 			automatic = true, -- automatically open diff view
+			warn_missing_ans = false, -- warn if answer file is missing
 		},
 		-- compilation commands
 		langs = {
