@@ -122,24 +122,26 @@ local function show_single(left_buf)
 	})
 end
 
-function M.showdiff(output)
-	local base = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t:r")
-	local ans_file = base .. ".ans"
-
-	local show_ans = true
-	-- Validate files exist
+local function has_ansfile(ans_file)
 	if not util.fileexists(ans_file) then
-		vim.notify("Missing file " .. ans_file .. ", try creating it", vim.log.levels.WARN, { title = "Warning" })
-		show_ans = false
+		if M.config.diff.warn_missing_ans then
+			util.log.warn("Missing file " .. ans_file .. ", try creating it")
+		end
+		return false
 	end
+	return true
+end
+
+local function showdiff_popup(base, output, ans_file)
+	local show_ans = has_ansfile(ans_file)
 
 	local left_buf = vim.api.nvim_create_buf(false, true)
 	vim.api.nvim_buf_set_lines(left_buf, 0, -1, false, vim.split(output, "\n", { plain = true }))
 
 	local ns1 = vim.api.nvim_create_namespace("output_win")
 	vim.api.nvim_buf_set_extmark(left_buf, ns1, 0, 0, {
-		virt_text = { { "Output", "Title" } },
-		virt_text_pos = "right_align", -- Or "inline", "overlay"
+		virt_text = { { base .. " - Output", "Title" } },
+		virt_text_pos = "right_align",
 	})
 
 	if show_ans then
@@ -148,12 +150,46 @@ function M.showdiff(output)
 		local ns2 = vim.api.nvim_create_namespace("answer_win")
 		vim.api.nvim_buf_set_extmark(right_buf, ns2, 0, 0, {
 			virt_text = { { "Answer", "Title" } },
-			virt_text_pos = "right_align", -- Or "inline", "overlay"
+			virt_text_pos = "right_align",
 		})
 
 		show_split(left_buf, right_buf)
 	else
 		show_single(left_buf)
+	end
+end
+
+local function showdiff_split(base, output, ans_file)
+	local show_ans = has_ansfile(ans_file)
+
+	local out_buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_name(out_buf, base .. " - Output")
+	vim.api.nvim_buf_set_lines(out_buf, 0, -1, false, vim.split(output, "\n", { plain = true }))
+
+	vim.cmd("vsplit")
+	vim.cmd("diffthis")
+
+	vim.api.nvim_set_current_buf(out_buf)
+
+	if show_ans then
+		vim.cmd("split")
+		vim.cmd("e " .. ans_file)
+		vim.cmd("diffthis")
+	end
+end
+
+local function showdiff(output)
+	local base = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t:r")
+	local ans_file = base .. ".ans"
+
+	if M.config.output == "popup" then
+		showdiff_popup(base, output, ans_file)
+	elseif M.config.output == "split" then
+		showdiff_split(base, output, ans_file)
+	elseif M.config.output == "none" then
+	-- do nothing
+	else
+		util.log.error("Output method " .. M.config.output .. " is not a valid option")
 	end
 end
 
@@ -163,7 +199,7 @@ function M.run()
 	local opts = M.config.langs[filetype]
 
 	if opts == nil then
-		print("No options found for filetype " .. filetype)
+		util.log.error("No options found for filetype " .. filetype)
 		return
 	end
 
@@ -186,11 +222,11 @@ function M.run()
 			cwd = vim.fn.getcwd(),
 		}):wait()
 		if output.code ~= 0 then
-			vim.notify("Compilation error: " .. output.stderr, vim.log.levels.ERROR)
-			vim.notify("Compile command: " .. table.concat(args, " "))
+			util.log.error("Compilation error: " .. output.stderr)
+			util.log.debug("Compile command: " .. table.concat(args, " "))
 			return
 		else
-			print("Finished compiling!")
+			util.log.info("Finished compiling!")
 		end
 	end
 
@@ -199,42 +235,42 @@ function M.run()
 
 	local input_file = base .. ".in"
 
+	if not util.fileexists(input_file) then
+		util.log.error("File " .. input_file .. " does not exist")
+		return
+	end
 	cmd = cmd .. " < " .. input_file
 
-	if vim.fn.filereadable(input_file) then
-		local dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":p:h")
-		local input = vim.fn.readfile(input_file)
+	local dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":p:h")
+	local input = vim.fn.readfile(input_file)
 
-		args = vim.split(cmd, " ", { plain = true })
-		vim.system(args, {
-			cwd = dir,
-			text = true,
-			stdin = table.concat(input, "\n"),
-		}, function(result)
-			local output = (result.stdout or "") .. (result.stderr or "")
-			if #output > 0 then
-				output = output .. "\n"
-			end
-
-			output = output .. string.format("(exited with code %d)\n", result.code)
-
-			if M.config.diff.automatic then
-				vim.schedule(function()
-					M.showdiff(output)
-				end)
-			end
-		end)
-
-		if opts["clean"] then
-			local clean_cmd = string.format("cd %s && rm %s", vim.fn.getcwd(), opts["run"])
-			local clean_output = vim.fn.system(clean_cmd)
-
-			if #clean_output > 0 then
-				print("Error while cleaning file: " .. clean_output)
-			end
+	args = vim.split(cmd, " ", { plain = true })
+	vim.system(args, {
+		cwd = dir,
+		text = true,
+		stdin = table.concat(input, "\n"),
+	}, function(result)
+		local output = (result.stdout or "") .. (result.stderr or "")
+		if #output > 0 then
+			output = output .. "\n"
 		end
-	else
-		print("Input file not found")
+
+		output = output .. string.format("[exited with code %d]", result.code)
+
+		if M.config.diff.automatic then
+			vim.schedule(function()
+				showdiff(output)
+			end)
+		end
+	end)
+
+	if opts["clean"] then
+		local clean_cmd = string.format("cd %s && rm %s", vim.fn.getcwd(), opts["run"])
+		local clean_output = vim.fn.system(clean_cmd)
+
+		if #clean_output > 0 then
+			util.log.error("Error while cleaning file: " .. clean_output)
+		end
 	end
 end
 

@@ -42,4 +42,22 @@ function M.which(exe)
 	return path.stdout
 end
 
+M.log = {}
+
+function M.log.warn(msg)
+	vim.notify(msg, vim.log.levels.WARN)
+end
+
+function M.log.error(msg)
+	vim.notify(msg, vim.log.levels.ERROR)
+end
+
+function M.log.info(msg)
+	vim.notify(msg, vim.log.levels.INFO)
+end
+
+function M.log.debug(msg)
+	vim.notify(msg, vim.log.levels.DEBUG)
+end
+
 return M
