@@ -28,16 +28,19 @@ local function initcontest(input)
 
 		local filename = contest .. "/" .. name
 		local f = io.open(filename .. "." .. (ext or M.config.lang), "w")
-		local fin = io.open(filename .. ".in", "w")
 
 		if f then
 			f:write("")
 			f:close()
 		end
 
-		if fin then
-			fin:write("")
-			fin:close()
+		if M.config.input_files then
+			local fin = io.open(filename .. ".in", "w")
+
+			if fin ~= nil then
+				fin:write("")
+				fin:close()
+			end
 		end
 	end
 

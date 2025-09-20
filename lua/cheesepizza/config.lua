@@ -61,6 +61,7 @@ local M = {
 
 				it_has = true, -- short hand for x.find(y) != x.end()
 				it_all = true, -- short hand for x.begin(), x.end()
+				it_between = true, -- returns a pair of iterators such that all values between the boundary values are between the two iterators (inclusive)
 
 				yn = true, -- use YES and NO to print either yes/no (for CF)
 				debug = true, -- debugging macros

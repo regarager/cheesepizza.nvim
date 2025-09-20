@@ -54,6 +54,13 @@ local function setup_cpp_template(config)
 		table.insert(lines, "#define all(x) x.begin(), x.end()")
 	end
 
+	if config.it_between then
+		table.insert(
+			lines,
+			"#define between(x, a, b) make_pair(lower_bound(x.begin(), x.end(), a), --upper_bound(x.begin(), x.end(), b))"
+		)
+	end
+
 	if config.yn then
 		table.insert(lines, '#define YES cout << "YES" << endl;')
 		table.insert(lines, '#define NO cout << "NO" << endl;')
