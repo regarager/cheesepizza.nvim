@@ -18,6 +18,10 @@ local function setup_cpp_template(config)
 		table.insert(lines, "#include <bits/stdc++.h>")
 	end
 
+	if config.int_long_long then
+		table.insert(lines, "#define int long long")
+	end
+
 	if config.namespace then
 		table.insert(lines, "using namespace std;")
 	end
@@ -96,7 +100,11 @@ local function setup_cpp_template(config)
 		table.insert(lines, "")
 	end
 
-	table.insert(lines, "int main() {{")
+	if config.int_long_long then
+		table.insert(lines, "signed main() {{")
+	else
+		table.insert(lines, "int main() {{")
+	end
 
 	table.insert(lines, "\t{code}")
 
@@ -122,6 +130,7 @@ local function setup_cpp_optional(config)
 			),
 		})
 	end
+
 	if config.primes then
 		ls.add_snippets("cpp", {
 			s("primes", t("vector<int> primes; for (int i = 2; i < SIZE; i++) { if (sieve[i]) primes.push_back(i); }")),
@@ -136,6 +145,18 @@ local function setup_cpp_optional(config)
 		ls.add_snippets("cpp", {
 			s("fastio", t(lines)),
 		})
+	end
+
+	if config.test_cases then
+		local lines = {}
+		table.insert(lines, "int t;")
+		table.insert(lines, "cin >> t;")
+		table.insert(lines, "")
+		table.insert(lines, "while (t--) {{")
+		table.insert(lines, "\t{code}")
+		table.insert(lines, "}}")
+
+		ls.add_snippets("cpp", { s("tcases", fmt(table.concat(lines, "\n"), { code = i(1) })) })
 	end
 end
 

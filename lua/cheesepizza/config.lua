@@ -52,12 +52,13 @@ local M = {
 			template = {
 				enabled = true, -- enables/disables the section
 				use_bits = true, -- use `#include <bits/stdc++.h>`
+				int_long_long = true, -- use #define int long long, also changes main to return signed
 				namespace = true, -- use `using namespace std;`
 
-				ll = true, -- use ll = long long
+				ll = false, -- use ll = long long
 				ld = true, -- use ld = long double
 				pi = true, -- use pi = pair<int, int>
-				pll = true, -- use pll = pair<long long, long long>
+				pll = false, -- use pll = pair<long long, long long>
 
 				it_has = true, -- short hand for x.find(y) != x.end()
 				it_all = true, -- short hand for x.begin(), x.end()
@@ -77,6 +78,7 @@ local M = {
 				fastio = true, -- improve io speed
 				sieve = true, -- generates sieve of eratosthenes
 				primes = true, -- generates list of primes (both recommended)
+				test_cases = true, -- snippet for reading t for individual test cases
 			},
 		},
 	},
