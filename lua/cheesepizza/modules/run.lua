@@ -1,4 +1,5 @@
 local util = require("cheesepizza.util")
+
 local M = {}
 
 local function show_split(left_buf, right_buf)
@@ -272,6 +273,60 @@ function M.run()
 			util.log.error("Error while cleaning file: " .. clean_output)
 		end
 	end
+end
+
+function M.run_term()
+	local filetype = vim.bo.filetype
+
+	local opts = M.config.langs[filetype]
+
+	if opts == nil then
+		util.log.error("No options found for filetype " .. filetype)
+		return
+	end
+
+	local exe = util.which(opts["exe"])
+
+	if exe == "" then
+		print(opts["exe"] .. " was not found")
+		return
+	end
+
+	exe = exe:gsub("%s+", "")
+
+	local args = { (table.unpack or unpack)(opts["args"]) }
+	table.insert(args, 1, exe)
+	table.insert(args, vim.api.nvim_buf_get_name(0))
+
+	local run_cmd = string.format(opts.run, vim.api.nvim_buf_get_name(0))
+	local base = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t:r")
+
+	local input_file = base .. ".in"
+
+	vim.cmd("vsplit")
+	vim.cmd("terminal")
+	local buf = vim.api.nvim_get_current_buf()
+	local term_chan = vim.api.nvim_buf_get_var(buf, "terminal_job_id")
+
+	if opts["compile"] then
+		local compile_cmd = table.concat(args, " ")
+		vim.api.nvim_chan_send(term_chan, compile_cmd .. "\n")
+	end
+
+	if not util.fileexists(input_file) then
+		util.log.error("File " .. input_file .. " does not exist")
+		return
+	end
+	run_cmd = run_cmd .. " < " .. input_file
+
+	vim.api.nvim_chan_send(term_chan, run_cmd .. "\n")
+
+	if opts["clean"] then
+		local clean_cmd = string.format("cd %s && rm %s", vim.fn.getcwd(), opts["run"])
+		vim.api.nvim_chan_send(term_chan, clean_cmd)
+	end
+
+	vim.api.nvim_chan_send(term_chan, "\n") -- not needed, just for visual
 end
 
 function M.setup(config)
