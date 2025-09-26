@@ -1,6 +1,6 @@
 # cheesepizza.nvim
 
-<center>A simple plugin for competitive programming in Neovim</center>
+A simple plugin for competitive programming in Neovim
 
 ## Heavily WIP!
 
