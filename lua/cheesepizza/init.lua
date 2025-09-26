@@ -20,6 +20,7 @@ vim.api.nvim_create_user_command("Contest", contest.newcontest, { nargs = "*" })
 vim.api.nvim_create_user_command("DebugToggle", dbg.debugtoggle, {})
 vim.api.nvim_create_user_command("DebugEnable", dbg.debugtoggle, {})
 vim.api.nvim_create_user_command("DebugDisable", dbg.debugdisable, {})
-vim.api.nvim_create_user_command("CPRun", run.run, { nargs = "*" })
+vim.api.nvim_create_user_command("Run", run.run, { nargs = "*" })
+vim.api.nvim_create_user_command("RunTerm", run.run_term, { nargs = "*" })
 
 return M
