@@ -1,8 +1,10 @@
 # cheesepizza.nvim
-## A simple plugin for competitive programming in Neovim
-### Heavily WIP!
 
-### Installation
+<center>A simple plugin for competitive programming in Neovim</center>
+
+## Heavily WIP!
+
+## Installation
 
 To install (for Lazy.nvim), simply add the following lines:
 
@@ -13,9 +15,9 @@ To install (for Lazy.nvim), simply add the following lines:
 }
 ```
 
-### Usage
+## Usage
 
-#### :Contest
+### :Contest
 - To use the command, enter `:Contest <args>` or `:Contest`
   - If no args are provided, then a popup will appear where you can insert the arguments as you would in the first option
 - Argument format `<CONTEST> <SIZE> [LANG]`
@@ -23,27 +25,46 @@ To install (for Lazy.nvim), simply add the following lines:
   - `SIZE` - the number of questions in the contest
   - `LANG` (optional) - the extension to use, defaults to the `lang` option in configuration.
 
-#### :DebugToggle
+### :DebugToggle
 - To use the command, enter `:DebugToggle`
 - If the language is supported, the `DEBUG_MODE` variable will be toggled
   - This variable is used for disabling blocks of code that are intended only for debugging and not for final submission
 
-#### :DebugEnable
+### :DebugEnable
 - To use the command, enter `:DebugEnable`
 - Sets `DEBUG_MODE` to true
 
-#### :DebugDisable
+### :DebugDisable
 - To use the command, enter `:DebugDisable`
 - Sets `DEBUG_MODE` to false
 
-#### :CPRun
-- To use the command, enter `:CPRun`
+### :Run
+- To use the command, enter `:Run`
   - The active buffer must be a supported language file (CPP, Python, Java)
 - The program will be compiled (where applicable) and run
   - Input is given through a corresponding `.in` file (ex: `A.in` for `A.cpp`)
 
-### Configuration
+### :RunTerm
+- To use the command, enter `:RunTerm`
+- Same as `:Run`, but all commands are executed in a Neovim terminal
 
+## Configuration
+
+### Setup
+
+```lua
+require("cheesepizza").setup({}) -- default options below
+
+-- creates keybind, recommended for speed
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "python", "java", "cpp" },
+    callback = function()
+        vim.keymap.set("n", "<leader>r", ":RunTerm<CR>")
+    end,
+})
+```
+
+### Default Options
 The default options are below (as well as in `lua/cheesepizza/config.lua`):
 
 ```lua
@@ -131,7 +152,7 @@ require("cheesepizza").setup({
 })
 ```
 
-### Coming Soon! (or not)
+## Coming Soon! (or not)
 - [x] Quickly toggle debug mode
 - [x] Diff viewer for test cases
 - [ ] More snippets
