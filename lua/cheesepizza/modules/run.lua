@@ -163,7 +163,7 @@ local function showdiff_split(base, output, ans_file)
 	local show_ans = has_ansfile(ans_file)
 
 	local out_buf = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_buf_set_name(out_buf, base .. " - Output")
+	vim.api.nvim_buf_set_name(out_buf, base .. " - Output " .. os.time())
 	vim.api.nvim_buf_set_lines(out_buf, 0, -1, false, vim.split(output, "\n", { plain = true }))
 
 	vim.cmd("vsplit")
