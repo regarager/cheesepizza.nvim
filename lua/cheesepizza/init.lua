@@ -6,6 +6,7 @@ local contest = require("cheesepizza.modules.contest")
 local dbg = require("cheesepizza.modules.debug")
 local run = require("cheesepizza.modules.run")
 local snippets = require("cheesepizza.modules.snippets")
+local utils = require("cheesepizza.modules.utils")
 
 function M.setup(opts)
 	M.config = vim.tbl_deep_extend("force", M.config, opts or {})
@@ -22,5 +23,6 @@ vim.api.nvim_create_user_command("DebugEnable", dbg.debugtoggle, {})
 vim.api.nvim_create_user_command("DebugDisable", dbg.debugdisable, {})
 vim.api.nvim_create_user_command("Run", run.run, { nargs = "*" })
 vim.api.nvim_create_user_command("RunTerm", run.run_term, { nargs = "*" })
+vim.api.nvim_create_user_command("CF", utils.cf_open, { nargs = "*" })
 
 return M
