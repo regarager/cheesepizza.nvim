@@ -15,6 +15,14 @@ To install (for Lazy.nvim), simply add the following lines:
 }
 ```
 
+For `vim.pack` (Neovim v0.12+), use the following:
+
+```lua
+vim.pack.add({
+    "https://github.com/regarager/cheesepizza.nvim"
+})
+```
+
 ## Usage
 
 ### :Contest
@@ -26,27 +34,27 @@ To install (for Lazy.nvim), simply add the following lines:
   - `LANG` (optional) - the extension to use, defaults to the `lang` option in configuration.
 
 ### :DebugToggle
-- To use the command, enter `:DebugToggle`
 - If the language is supported, the `DEBUG_MODE` variable will be toggled
   - This variable is used for disabling blocks of code that are intended only for debugging and not for final submission
 
 ### :DebugEnable
-- To use the command, enter `:DebugEnable`
 - Sets `DEBUG_MODE` to true
 
 ### :DebugDisable
-- To use the command, enter `:DebugDisable`
 - Sets `DEBUG_MODE` to false
 
 ### :Run
-- To use the command, enter `:Run`
-  - The active buffer must be a supported language file (CPP, Python, Java)
+- The active buffer must be a supported language file (CPP, Python, Java)
 - The program will be compiled (where applicable) and run
   - Input is given through a corresponding `.in` file (ex: `A.in` for `A.cpp`)
 
 ### :RunTerm
-- To use the command, enter `:RunTerm`
 - Same as `:Run`, but all commands are executed in a Neovim terminal
+
+### :CF
+- Attempts to open the corresponding problem in the browser using `vim.ui.open`
+- The filepath must either match `.../[contest]/[problem].[extension]` or `.../[contest][problem].[extension]`
+  - Ex: `/home/user/programming/1337A.cpp` or `/home/user/programming/1337/A.cpp`
 
 ## Configuration
 
