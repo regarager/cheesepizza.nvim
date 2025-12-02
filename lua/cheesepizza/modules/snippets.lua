@@ -50,6 +50,8 @@ local function setup_cpp_template(config)
 		table.insert(lines, "")
 	end
 
+	table.insert(lines, "// clang-format off")
+
 	if config.it_has then
 		table.insert(lines, "#define has(x, y) x.find(y) != x.end()")
 	end
@@ -77,7 +79,6 @@ local function setup_cpp_template(config)
 	end
 
 	if config.print_util then
-		table.insert(lines, "// clang-format off")
 		table.insert(lines, '#define print(x) for (auto it : x) {{ cout << it << " "; }} cout << endl;')
 		table.insert(
 			lines,
@@ -85,8 +86,9 @@ local function setup_cpp_template(config)
 		)
 		table.insert(lines, '#define printmv(x) for (auto it : x) {{ cout << it.first << ": "; print(it.second); }}')
 		table.insert(lines, '#define printn(x, n) for (int i = 0; i < n; i++) {{ cout << x[i] << " "; }} cout << endl;')
-		table.insert(lines, "// clang-format on")
 	end
+
+	table.insert(lines, "// clang-format on")
 
 	if config.separate_sections and #lines > 0 then
 		table.insert(lines, "")

@@ -313,20 +313,20 @@ function M.run_term()
 		vim.api.nvim_chan_send(term_chan, compile_cmd .. "\n")
 	end
 
-	if not util.fileexists(input_file) then
+	local input_exists = util.fileexists(input_file)
+	if not input_exists then
 		util.log.error("File " .. input_file .. " does not exist")
-		return
+	else
+		run_cmd = run_cmd .. " < " .. input_file
 	end
-	run_cmd = run_cmd .. " < " .. input_file
 
 	vim.api.nvim_chan_send(term_chan, run_cmd .. "\n")
 
-	if opts["clean"] then
+	if input_exists and opts["clean"] then
 		local clean_cmd = string.format("cd %s && rm %s", vim.fn.getcwd(), opts["run"])
 		vim.api.nvim_chan_send(term_chan, clean_cmd)
+		vim.api.nvim_chan_send(term_chan, "\n") -- not needed, just for visual
 	end
-
-	vim.api.nvim_chan_send(term_chan, "\n") -- not needed, just for visual
 end
 
 function M.setup(config)
