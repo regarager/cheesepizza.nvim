@@ -160,6 +160,27 @@ signed main() {
 }
 ```
 
+Optional snippets:
+
+```cpp
+// sieve
+vector<bool> sieve(SIZE, true); for (int i = 2; i < SIZE; i++) { if (!sieve[i]) continue; for (int j = i * 2; j < SIZE; j += i) sieve[j] = false; }
+
+// primes
+vector<int> primes; for (int i = 2; i < SIZE; i++) { if (sieve[i]) primes.push_back(i); }
+
+// fastio
+ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+// tcases
+int t;
+cin >> t;
+
+while (t--) {
+
+}
+```
+
 ## Coming Soon! (or not)
 - [x] Quickly toggle debug mode
 - [x] Diff viewer for test cases
