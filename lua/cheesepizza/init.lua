@@ -5,14 +5,12 @@ M.config = require("cheesepizza.config")
 local contest = require("cheesepizza.modules.contest")
 local dbg = require("cheesepizza.modules.debug")
 local run = require("cheesepizza.modules.run")
-local snippets = require("cheesepizza.modules.snippets")
 local utils = require("cheesepizza.modules.utils")
 
 function M.setup(opts)
 	M.config = vim.tbl_deep_extend("force", M.config, opts or {})
 	contest.setup(M.config)
 	dbg.setup(M.config)
-	snippets.setup(M.config)
 	run.setup(M.config)
 end
 
