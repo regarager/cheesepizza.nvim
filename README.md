@@ -67,7 +67,7 @@ require("cheesepizza").setup({}) -- default options below
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "python", "java", "cpp" },
     callback = function()
-        vim.keymap.set("n", "<leader>r", ":RunTerm<CR>")
+        vim.keymap.set("n", "<leader>r", ":RunTerm<CR>", { buffer = 0 })
     end,
 })
 ```
