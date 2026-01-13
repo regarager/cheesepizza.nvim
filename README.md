@@ -67,7 +67,7 @@ require("cheesepizza").setup({}) -- default options below
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "python", "java", "cpp" },
     callback = function()
-        vim.keymap.set("n", "<leader>r", ":RunTerm<CR>")
+        vim.keymap.set("n", "<leader>r", ":RunTerm<CR>", { buffer = 0 })
     end,
 })
 ```
@@ -121,49 +121,69 @@ require("cheesepizza").setup({
 		change_dir = true, -- automatically :cd into the new contest directory
 		input_files = false, -- automatically create .in files
 	},
-	-- Templates to use for contests, USE AT YOUR OWN RISK
-	snippets = {
-		enabled = true, -- enables/disables the section
-		cpp = {
-			enabled = true, -- enables/disables the section
-			-- Generation of problem template
-			template = {
-				enabled = true, -- enables/disables the section
-				use_bits = true, -- use `#include <bits/stdc++.h>`
-				namespace = true, -- use `using namespace std;`
-
-				ll = true, -- use ll = long long
-				ld = true, -- use ld = long double
-				pi = true, -- use pi = pair<int, int>
-				pll = true, -- use pll = pair<long long, long long>
-
-				it_has = true, -- short hand for x.find(y) != x.end()
-				it_all = true, -- short hand for x.begin(), x.end()
-
-				yn = true, -- use YES and NO to print either yes/no (for CF)
-				debug = true, -- debugging macros
-				print_util = true, -- macros for printing arrays, vectors, maps
-
-				size = true, -- set a constant size variable (default: 2e5 + 5)
-
-				separate_sections = true, -- add spacing between different sections of the snippet, sections follow the splitting in this file
-			},
-			-- Snippets that are not included in template but can be used when needed
-			optional = {
-				enabled = true,
-				fastio = true, -- improve io speed
-				sieve = true, -- generates sieve of eratosthenes
-				primes = true, -- generates list of primes (both recommended)
-			},
-		},
-	},
 })
+```
+
+### Snippets
+
+As of Dec. 10, 2025, snippets have been removed `cheesepizza.nvim`, since it is more practical to write your own snippet and use a snippet engine like [LuaSnip](https://github.com/L3MON4D3/LuaSnip).
+
+The original C++ snippet can be found below:
+
+```cpp
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+using ld = long double;
+using pi = pair<int, int>;
+
+// clang-format off
+#define has(x, y) x.find(y) != x.end()
+#define all(x) x.begin(), x.end()
+#define between(x, a, b) make_pair(lower_bound(x.begin(), x.end(), a), --upper_bound(x.begin(), x.end(), b))
+#define YES cout << "YES" << endl;
+#define NO cout << "NO" << endl;
+#define DEBUG_MODE true
+#define DEBUG if (DEBUG_MODE)
+#define NOTDEBUG if (!DEBUG_MODE)
+#define print(x) for (auto it : x) { cout << it << " "; } cout << endl
+#define printm(x) for (auto it : x) { cout << it.first << ": " << it.second << endl; } cout << endl
+#define printmv(x) for (auto it : x) { cout << it.first << ": "; print(it.second); }
+#define printn(x, n) for (int i = 0; i < n; i++) { cout << x[i] << " \n"[i == n - 1]; }
+// clang-format on
+
+const int SIZE = 2e5 + 5;
+
+signed main() {
+
+}
+```
+
+Optional snippets:
+
+```cpp
+// sieve
+vector<bool> sieve(SIZE, true); for (int i = 2; i < SIZE; i++) { if (!sieve[i]) continue; for (int j = i * 2; j < SIZE; j += i) sieve[j] = false; }
+
+// primes
+vector<int> primes; for (int i = 2; i < SIZE; i++) { if (sieve[i]) primes.push_back(i); }
+
+// fastio
+ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+// tcases
+int t;
+cin >> t;
+
+while (t--) {
+
+}
 ```
 
 ## Coming Soon! (or not)
 - [x] Quickly toggle debug mode
 - [x] Diff viewer for test cases
-- [ ] More snippets
 - [ ] Contest timer
 - [ ] Track solved in contest
 - [ ] Web integration with CF (highly unlikely)

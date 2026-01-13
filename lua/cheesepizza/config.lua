@@ -43,45 +43,6 @@ local M = {
 		change_dir = true, -- automatically :cd into the new contest directory
 		input_files = false, -- automatically create .in files
 	},
-	-- Templates to use for contests, USE AT YOUR OWN RISK
-	snippets = {
-		enabled = true, -- enables/disables the section
-		cpp = {
-			enabled = true, -- enables/disables the section
-			-- Generation of problem template
-			template = {
-				enabled = true, -- enables/disables the section
-				use_bits = true, -- use `#include <bits/stdc++.h>`
-				int_long_long = true, -- use #define int long long, also changes main to return signed
-				namespace = true, -- use `using namespace std;`
-
-				ll = false, -- use ll = long long
-				ld = true, -- use ld = long double
-				pi = true, -- use pi = pair<int, int>
-				pll = false, -- use pll = pair<long long, long long>
-
-				it_has = true, -- short hand for x.find(y) != x.end()
-				it_all = true, -- short hand for x.begin(), x.end()
-				it_between = true, -- returns a pair of iterators such that all values between the boundary values are between the two iterators (inclusive)
-
-				yn = true, -- use YES and NO to print either yes/no (for CF)
-				debug = true, -- debugging macros
-				print_util = true, -- macros for printing arrays, vectors, maps
-
-				size = true, -- set a constant size variable (default: 2e5 + 5)
-
-				separate_sections = true, -- add spacing between different sections of the snippet, sections follow the splitting in this file
-			},
-			-- Snippets that are not included in template but can be used when needed
-			optional = {
-				enabled = true,
-				fastio = true, -- improve io speed
-				sieve = true, -- generates sieve of eratosthenes
-				primes = true, -- generates list of primes (both recommended)
-				test_cases = true, -- snippet for reading t for individual test cases
-			},
-		},
-	},
 }
 
 return M
